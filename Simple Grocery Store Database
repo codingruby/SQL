@@ -1,0 +1,32 @@
+--Create a grocery store database
+
+CREATE TABLE store (id INTEGER PRIMARY KEY, item TEXT, section TEXT, price INTEGER, quantity INTEGER);
+
+INSERT INTO store VALUES (1, "apple", "fruit", 1.95, 20);
+INSERT INTO store VALUES (2, "broccoli", "veg", 2.00, 10);
+INSERT INTO store VALUES (3, "toothpaste", "toiletries", 3.25, 10);
+INSERT INTO store VALUES (4, "rice", "pantry", 3.50, 5);
+INSERT INTO store VALUES (5, "chicken", "meat", 2.99, 15);
+INSERT INTO store VALUES (6, "wine", "alcohol", 14.99, 20);
+INSERT INTO store VALUES (7, "olives", "deli", 5.65, 10);
+INSERT INTO store VALUES (8, "orange", "fruit", 1.95, 20);
+INSERT INTO store VALUES (9, "beef", "meat", 6.00, 10);
+INSERT INTO store VALUES (10, "icecream", "frozen", 5.45, 5);
+INSERT INTO store VALUES (11, "baby wipes", "toiletries", 2.99, 20);
+INSERT INTO store VALUES (12, "cocopops", "pantry", 3.25, 10);
+INSERT INTO store VALUES (13, "chocolate", "pantry", 4.25, 30);
+INSERT INTO store VALUES (14, "yoghurt", "dairy", 6.00, 10);
+INSERT INTO store VALUES (15, "cheese", "dairy", 4.00, 30);
+
+--display the database ordered by price. 
+SELECT item FROM store ORDER BY price;
+
+--what is the SUM price of items in the pantry section? 
+SELECT SUM(price)
+FROM store
+WHERE section = 'pantry'; 
+
+--what items have a quantity of 10 or more? 
+SELECT item, section
+FROM store
+WHERE quantity >= 10;
