@@ -1,0 +1,122 @@
+/**In this project, you’re going to make your own table with some small 
+set of “famous people”, then make more tables about things they do and join 
+those to create nice human readable lists. 
+
+My project contains three tables with sizeable data.
+All tables contain a column that relates to the primary key of another table**/
+
+/**This data is from 2023 current line up and current statistics**/
+
+
+CREATE TABLE formula1drivers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fullname TEXT,
+    age INTEGER,
+    nationality TEXT,
+    team_id INTEGER);
+    
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Max Verstappen", 25, "Netherlands", 2);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Lewis Hamilton", 38, "UK", 1);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Pierre Gasly", 27, "France", 6);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Logan Sargeant", 22, "US", 8);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Lando Norris", 23, "UK", 9);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Sergio Perez", 33, "Mexico", 2);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Fernando Alonso", 41, "Spain", 3);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Charles Leclerc", 25, "Monaco", 4);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Lance Stroll", 22, "Canada", 3);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Kevin Magnussen", 30, "Denmark", 7);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Nyck de Vries", 28, "Netherlands", 10);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Yuki Tsunoda", 22, "Japan", 10);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Alex Albon", 27, "Thailand", 8);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Zhou Guanyu", 23, "China", 5);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Nick Hulkenburg", 35, "Germany", 7);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Esteban Ocon", 26, "France", 6);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Carlos Sainz", 28, "Spain", 4);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("George Russell", 25, "UK", 1);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Valtteri Bottas", 33, "Finland", 5);
+INSERT INTO formula1drivers (fullname, age, nationality, team_id) VALUES ("Oscar Piastri", 21, "Australia", 9);
+
+
+CREATE table formula1team (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    team_name TEXT);
+    
+INSERT INTO formula1team (team_name) VALUES ("Mercedes");
+INSERT INTO formula1team (team_name) VALUES ("Red Bull");
+INSERT INTO formula1team (team_name) VALUES ("Aston Martin");
+INSERT INTO formula1team (team_name) VALUES ("Ferrari");
+INSERT INTO formula1team (team_name) VALUES ("Alfa Romeo");
+INSERT INTO formula1team (team_name) VALUES ("Alpine");
+INSERT INTO formula1team (team_name) VALUES ("Haas");
+INSERT INTO formula1team (team_name) VALUES ("Williams");
+INSERT INTO formula1team (team_name) VALUES ("McLaren");
+INSERT INTO formula1team (team_name) VALUES ("Alpha Tauri");
+
+CREATE table grandprix (
+    driver_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    grandprix_podiums INTEGER,
+    worldchampionship_wins INTEGER);
+    
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (79, 2);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (191, 7);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (3, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (0, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (6, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (28, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (100, 2);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (24, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (3, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (1, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (0, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (0, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (2, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (0, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (0, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (2, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (15, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (9, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (67, 0);
+INSERT INTO grandprix (grandprix_podiums, worldchampionship_wins) VALUES (0, 0);
+
+--Let's have a look at all the current f1 drivers
+SELECT * FROM formula1drivers;
+
+--All information from table formula1team
+SELECT * FROM formula1team;
+
+--All information from grandprix
+SELECT * FROM grandprix
+
+--What is each drivers nationality?
+SELECT fullname, nationality
+FROM formula1drivers;
+
+--Show the driver names that have won atleast one grandprix podium
+SELECT fullname, grandprix_podiums
+FROM formula1drivers
+JOIN grandprix
+ON formula1drivers.id = grandprix.driver_id
+WHERE grandprix_podiums >= 1
+ORDER BY grandprix_podiums DESC;
+
+--What team is each driver currently racing for?
+SELECT fullname, team_name
+FROM formula1drivers
+JOIN formula1team
+ON formula1drivers.team_id = formula1team.id
+GROUP BY fullname
+ORDER BY team_name;
+
+--Who is Lewis Hamilton's team mate?
+----(I broke this query into 2, however I'm sure there must be a quicker/easier way)
+SELECT fullname, team_name
+FROM formula1drivers
+JOIN formula1team
+ON formula1drivers.team_id = formula1team.id
+WHERE fullname IN ("Lewis Hamilton");
+
+SELECT fullname, team_name
+FROM formula1drivers
+JOIN formula1team
+ON formula1drivers.team_id = formula1team.id
+WHERE team_name IN ("Mercedes");
