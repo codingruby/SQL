@@ -42,3 +42,13 @@ SELECT track_name, popularity
 FROM Spotifydata
 ORDER BY popularity DESC
 LIMIT 10;
+
+## Use a CTE (Common Table Expression) to tag Top Star for artists who have an average popularity of 90 or above.
+WITH temptable_CTE AS (
+    SELECT AVG(popularity) AS avg_popularity, artist_name
+    FROM Spotifydata
+    GROUP BY artist_name
+    )
+SELECT artist_name, avg_popularity,'Top Star' AS tag
+FROM temptable_CTE
+WHERE avg_popularity >= 90;
