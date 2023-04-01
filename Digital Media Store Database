@@ -109,5 +109,48 @@ ORDER BY ROUND(SUM(i.Total), 2) DESC
 LIMIT 1;
 
 Extra questions that I used ChatGPT to come up with :)
+# 15. How many employees are there in the database?
+SELECT COUNT(EmployeeId)
+FROM employees;
+
+# 16. How many invoices are in the database?
+SELECT COUNT(InvoiceId)
+FROM invoices;
+
+--OR
+
+SELECT COUNT(*)
+FROM invoices;
+
+# 17. What is the total revenue from the invoices?
+SELECT ROUND(SUM(Total), 2) AS total_revenue
+FROM invoices;
+
+# 18. What is the average number of albums per artist?
+SELECT ROUND(AVG(album_count)) AS avg_albums
+FROM (
+SELECT COUNT(*) AS album_count
+FROM albums
+GROUP BY ArtistId);
+
+# 19. What are the top-selling tracks in the database, and how many times have they been sold?
+SELECT Name AS track_name, SUM(Quantity) AS total_sales
+FROM tracks
+JOIN invoice_items 
+ON tracks.TrackId = invoice_items.TrackId
+GROUP BY tracks.TrackId
+ORDER BY total_sales DESC
+LIMIT 5;
+
+# 20. Can you provide a breakdown of revenue by genre?
+SELECT genres.Name AS genre_name, ROUND(SUM(invoice_items.UnitPrice * invoice_items.Quantity), 2) AS revenue
+FROM genres
+JOIN tracks 
+ON genres.GenreId = tracks.GenreId
+JOIN invoice_items 
+ON tracks.TrackId = invoice_items.TrackId
+GROUP BY genres.Name
+ORDER BY revenue DESC;
+
 
 
