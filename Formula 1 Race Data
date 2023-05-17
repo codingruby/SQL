@@ -1,0 +1,60 @@
+-- This project I went ahead myself and found a dataset on Kaggle. It is Formula 1 Race Data from the years 1950 to 2017. 
+Using SQLite Studio I extracted information from the dataset with a number of SQl queries.
+
+## Who were the drivers with the most wins each season? Limit to 3 drivers.
+WITH SeasonWins AS (
+SELECT r.year, d.forename, d.surname, COUNT(*) AS Wins,
+ROW_NUMBER() OVER (PARTITION BY r.year ORDER BY COUNT(*) DESC) as Rank
+FROM results res
+JOIN drivers d
+ON res.driverId = d.driverId
+JOIN races r
+ON r.raceId = res.raceId
+WHERE res.positionOrder = 1 
+GROUP BY r.year, d.driverId
+)
+SELECT year, forename, surname, Wins
+FROM SeasonWins
+WHERE Rank <= 3
+ORDER BY year ASC, Wins DESC;
+
+## What is the average pitstop times over the years?
+SELECT year, AVG(duration) AS AveragePitStopTime 
+FROM races 
+JOIN pitstops
+ON races.raceId = pitstops.raceId
+GROUP BY year;
+
+## Teams with the most constructors championship?
+SELECT name, COUNT(*) AS Championships
+FROM constructors c
+JOIN constructor_standings cs
+ON c.constructorId = cs.constructorId
+GROUP BY name
+ORDER BY Championships DESC;
+
+## Which circuit has hosted the most races?
+SELECT circuitId, name, COUNT(*) AS race_count
+FROM races
+GROUP BY circuitId
+ORDER BY race_count DESC
+LIMIT 1;
+
+## Which country has produced the most drivers?
+SELECT nationality, COUNT(*) AS driver_count
+FROM drivers
+GROUP BY nationality
+ORDER BY driver_count DESC
+LIMIT 1;
+
+## Which driver has the most pole positions?
+SELECT q.driverId, forename, surname, COUNT(*) as pole_count
+FROM qualifying q
+JOIN drivers d
+ON d.driverId = q.driverId
+WHERE position = 1
+GROUP BY q.driverId
+ORDER BY pole_count DESC
+LIMIT 1;
+
+
